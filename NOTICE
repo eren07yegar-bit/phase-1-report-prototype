@@ -1,0 +1,11 @@
+This prototype adapts the original Example 14 `research-feature-explainer.html` template.
+
+Original template notice:
+Copyright 2026 Anthropic PBC
+SPDX-License-Identifier: Apache-2.0
+
+The template's HTML/CSS structure and styling are retained and modified for Persian RTL reading. The modifications include Persian report content, RTL/layout rules, responsive navigation, per-chapter reading progress, search, and text-size controls.
+
+Report passages are selected from the user's Persian research report. They are included here solely as part of this explicitly requested public prototype.
+
+Vazirmatn font files are separately licensed under the SIL Open Font License; see assets/fonts/OFL.txt.

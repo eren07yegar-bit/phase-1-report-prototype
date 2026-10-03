@@ -1,0 +1,1273 @@
+<!doctype html>
+<!-- Adapted from Example 14 for Persian RTL and scroll-first prototype reading; original Copyright 2026 Anthropic PBC, Apache-2.0. Changes include Persian source content, RTL typography, reader controls, navigation, and responsive styling. -->
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پژوهش جامع بازار، مخاطب، رقبا و معماری استراتژیک صفحه طراحی گرافیک</title>
+<style>
+  :root {
+    --ivory:   #FAF9F5;
+    --slate:   #141413;
+    --clay:    #D97757;
+    --oat:     #E3DACC;
+    --olive:   #788C5D;
+    --sky:     #6A8CAF;
+    --rust:    #B04A3F;
+    --gray-100:#F5F4EE;
+    --gray-150:#F0EEE6;
+    --gray-300:#D1CFC5;
+    --gray-500:#87867F;
+    --gray-700:#3D3D3A;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ivory);
+    color: var(--gray-700);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+  }
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 0 52px;
+  }
+  @media (max-width: 920px) {
+    .page { grid-template-columns: 1fr; }
+    nav { display: none; }
+    main { padding: 40px 24px 100px; }
+  }
+
+  /* ── top bar ── */
+  .top-bar {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--gray-300);
+    padding: 12px 0;
+  }
+  .top-bar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .top-bar .logo-mark {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+    background: var(--slate);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ivory); font-size: 11px; font-weight: 700;
+    font-family: var(--mono);
+  }
+  .top-bar .crumbs {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    letter-spacing: 0.02em;
+  }
+  .top-bar .crumbs span { color: var(--gray-300); margin: 0 6px; }
+
+  /* ── nav ──────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    font-size: 13px;
+    padding: 32px 0 32px 24px;
+    border-right: 1px solid var(--gray-300);
+    height: 100vh;
+    overflow-y: auto;
+  }
+  nav .nav-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 16px;
+    padding-left: 12px;
+  }
+  nav a {
+    display: block;
+    padding: 6px 0 6px 12px;
+    border-left: 2px solid transparent;
+    color: var(--gray-500);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.4;
+    transition: all 100ms ease;
+  }
+  nav a:hover { color: var(--slate); border-color: var(--gray-300); }
+  nav a.active { color: var(--slate); border-color: var(--clay); font-weight: 500; }
+  nav a.l2 { padding-left: 24px; font-size: 12px; color: var(--gray-500); }
+  nav .files {
+    margin-top: 32px;
+    border-top: 1px solid var(--gray-300);
+    padding-top: 20px;
+    padding-left: 12px;
+  }
+  nav .files .nav-label { padding-left: 0; }
+  nav .files code {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    padding: 3px 0;
+    line-height: 1.5;
+  }
+
+  /* ── main content ── */
+  main {
+    padding: 40px 24px 120px 0;
+    min-width: 0;
+  }
+
+  /* ── header ───────────────────────────── */
+  header { margin-bottom: 20px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 36px;
+    color: var(--slate);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  h1 code {
+    font-family: var(--mono);
+    font-size: 28px;
+    color: var(--clay);
+    font-weight: 400;
+    background: rgba(217,119,87,0.08);
+    padding: 2px 8px;
+    border-radius: 5px;
+  }
+  .tldr {
+    border: 1.5px solid var(--gray-300);
+    border-left: 3px solid var(--clay);
+    border-radius: 8px;
+    background: var(--gray-100);
+    padding: 18px 20px;
+    margin-bottom: 8px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--gray-700);
+  }
+  .tldr b { color: var(--slate); }
+  .tldr code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: rgba(217,119,87,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--clay);
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 24px;
+    color: var(--slate);
+    margin: 52px 0 16px;
+    scroll-margin-top: 24px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--gray-300);
+    min-width: 40px;
+  }
+  p { margin-bottom: 14px; max-width: 680px; }
+  code { font-family: var(--mono); font-size: 13px; }
+
+  /* ── collapsible ─────────────────────── */
+  details {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    background: #fff;
+    margin: 10px 0;
+    overflow: hidden;
+    transition: box-shadow 200ms ease;
+  }
+  details:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--slate);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 100ms ease;
+  }
+  summary:hover { background: var(--gray-100); }
+  summary::-webkit-details-marker { display: none; }
+  summary .step-no {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--slate);
+    color: var(--ivory);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  summary .where {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-left: auto;
+    background: var(--gray-150);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  details .body {
+    padding: 0 18px 18px 54px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms ease;
+  }
+  details[open] .body {
+    max-height: 400px;
+    padding: 4px 18px 18px 54px;
+  }
+  details .body p { font-size: 14px; }
+  details .body code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: rgba(217,119,87,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: var(--clay);
+  }
+
+  /* ── tabs ─────────────────────────────── */
+  .tabs {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    background: #fff;
+    margin: 18px 0 8px;
+    overflow: hidden;
+  }
+  .tabbar {
+    display: flex;
+    border-bottom: 1px solid var(--gray-300);
+    background: var(--gray-100);
+  }
+  .tabbar button {
+    appearance: none;
+    border: none;
+    background: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gray-500);
+    padding: 11px 18px;
+    cursor: pointer;
+    position: relative;
+    transition: color 100ms ease;
+  }
+  .tabbar button:hover { color: var(--slate); }
+  .tabbar button.on {
+    background: #fff;
+    color: var(--slate);
+    font-weight: 500;
+  }
+  .tabbar button.on::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--clay);
+  }
+  .tabs pre {
+    display: none;
+    margin: 0;
+    padding: 18px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--slate);
+    overflow-x: auto;
+  }
+  .tabs pre.on { display: block; }
+  .hl { color: var(--clay); }
+  .cm { color: var(--gray-500); }
+
+  /* ── callout ──────────────────────────── */
+  .callout {
+    display: flex;
+    gap: 14px;
+    border: 1.5px solid var(--oat);
+    background: rgba(227,218,204,0.2);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 22px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .callout .ico {
+    color: var(--clay);
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .callout code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: rgba(217,119,87,0.1);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--clay);
+  }
+
+  /* ── gotchas ── */
+  .gotcha-list {
+    list-style: none;
+    padding: 0;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .gotcha-list li {
+    background: #fff;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.55;
+    position: relative;
+    padding-left: 36px;
+  }
+  .gotcha-list li::before {
+    content: "!";
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--oat);
+    color: var(--slate);
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gotcha-list b { color: var(--slate); }
+
+  /* ── faq ──────────────────────────────── */
+  dl.faq { margin-top: 8px; }
+  dl.faq dt {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--slate);
+    margin-top: 22px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--gray-300);
+  }
+  dl.faq dd {
+    font-size: 14px;
+    margin: 8px 0 0;
+    max-width: 640px;
+    line-height: 1.6;
+    color: var(--gray-700);
+  }
+  dl.faq dd code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: rgba(217,119,87,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: var(--clay);
+  }
+
+
+  @font-face {
+    font-family: "Vazirmatn";
+    src: url("assets/fonts/Vazirmatn-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Vazirmatn";
+    src: url("assets/fonts/Vazirmatn-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Vazirmatn";
+    src: url("assets/fonts/Vazirmatn-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Vazirmatn";
+    src: url("assets/fonts/Vazirmatn-Bold.ttf") format("truetype");
+    font-weight: 700 900;
+    font-display: swap;
+  }
+  :root { --sans: "Vazirmatn", Tahoma, sans-serif; --serif: "Vazirmatn", Tahoma, sans-serif; --reader-scale: 1; }
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+  body { direction: rtl; font-family: var(--sans); font-size: calc(15px * var(--reader-scale)); line-height: 1.9; overflow-x: hidden; }
+  .page { direction: ltr; grid-template-columns: 220px minmax(0, 1fr); gap: 0 42px; max-width: 1240px; min-width: 0; }
+  .top-bar-inner { direction: rtl; }
+  .top-bar .logo-mark { font-family: var(--sans); }
+  .top-bar .crumbs { direction: rtl; font-family: var(--sans); letter-spacing: 0; }
+  nav { direction: rtl; top: 0; height: 100vh; padding: 28px 12px 28px 0; border-right: 0; border-left: 1px solid var(--gray-300); text-align: right; }
+  nav .nav-label { padding: 0 0 0 10px; letter-spacing: .08em; font-family: var(--sans); font-size: 11px; }
+  nav a { display: flex; align-items: flex-start; gap: 8px; padding: 7px 10px 7px 4px; border-left: 0; border-right: 2px solid transparent; text-align: right; font-family: var(--sans); font-size: 12px; line-height: 1.55; }
+  nav a.active { border-right-color: var(--clay); border-left: 0; }
+  nav a:hover { border-right-color: var(--gray-300); }
+  nav a.l2 { padding-right: 18px; }
+  .nav-no, .chapter-number { flex: 0 0 28px; direction: ltr; text-align: left; font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+  nav .files { display: none; }
+  main { direction: rtl; min-width: 0; padding: 28px 24px 100px 0; }
+  header { direction: rtl; margin-bottom: 34px; }
+  .eyebrow { direction: rtl; font-family: var(--sans); font-size: 12px; letter-spacing: 0; text-transform: none; }
+  h1, h2, h3 { direction: rtl; font-family: var(--serif); letter-spacing: 0; line-height: 1.55; overflow-wrap: anywhere; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.45; font-weight: 700; }
+  h2 { font-size: clamp(22px, 2.4vw, 28px); margin: 36px 0 16px; scroll-margin-top: 100px; }
+  h2::after { min-width: 24px; }
+  h3 { font-size: 19px; }
+  p, li, dd { direction: rtl; text-align: right; font-size: calc(15px * var(--reader-scale)); line-height: 1.95; overflow-wrap: anywhere; }
+  p { max-width: 680px; }
+  .tldr { direction: rtl; border-left: 1.5px solid var(--gray-300); border-right: 3px solid var(--clay); line-height: 1.9; }
+  .tldr .start-reading { display: inline-block; margin: 8px 0 0 10px; color: var(--clay); text-decoration: none; border-bottom: 1px solid var(--oat); }
+  .reader-tools { position: sticky; top: 0; z-index: 15; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin: -28px -24px 24px 0; padding: 10px 24px 10px 0; border-bottom: 1px solid var(--gray-300); background: rgba(250,249,245,.97); }
+  .tool-button, .menu-toggle { appearance: none; border: 1px solid var(--gray-300); background: transparent; color: var(--gray-700); font: 500 13px var(--sans); padding: 6px 10px; cursor: pointer; }
+  .tool-button:hover, .tool-button:focus-visible, .menu-toggle:focus-visible { border-color: var(--clay); outline: 1px solid var(--clay); }
+  .reading-status { flex: 1 1 220px; min-width: 160px; color: var(--gray-500); font-size: 12px; }
+  .progress-track { height: 3px; flex: 1 0 100%; direction: ltr; background: var(--gray-150); }
+  .progress-value { height: 100%; width: 0; background: var(--clay); transition: width .12s linear; }
+  #search-panel { flex: 1 0 100%; min-width: 0; padding: 8px 0 2px; }
+  #search-panel[hidden] { display: none; }
+  #search-panel label { display: block; margin-bottom: 6px; font-size: 12px; }
+  .search-row { display: flex; gap: 8px; }
+  #search-input { flex: 1; min-width: 0; padding: 8px; border: 1px solid var(--gray-300); font: 14px var(--sans); direction: rtl; }
+  #search-results { max-height: 220px; overflow: auto; }
+  #search-results button { display: block; width: 100%; padding: 7px; text-align: right; direction: rtl; background: transparent; border: 0; border-bottom: 1px solid var(--gray-150); font: 13px/1.7 var(--sans); cursor: pointer; }
+  #search-results button:hover { color: var(--clay); }
+  .reader-section { min-width: 0; margin: 0 0 44px; padding: 8px 0 20px; scroll-margin-top: 96px; }
+  .reader-section + .reader-section { border-top: 1px solid var(--gray-300); }
+  .reader-section .chapter-opener { max-width: 720px; }
+  .reader-section .chapter-title { margin: 0 0 18px; }
+  .reader-section .chapter-title .chapter-index { direction: ltr; }
+  .reader-section .chapter-question { max-width: 680px; text-align: right; }
+  .reader-section .chapter-question p { margin: 4px 0; }
+  .reader-section .chapter-deck { font-weight: 500; }
+  .callout { direction: rtl; border-left: 1.5px solid var(--oat); border-right: 3px solid var(--clay); text-align: right; }
+  .callout .ico { font-family: var(--sans); line-height: 1.6; }
+  blockquote { max-width: 680px; margin: 22px 0; padding: 4px 18px 4px 0; border-right: 2px solid var(--clay); border-left: 0; font: 700 18px/1.9 var(--serif); }
+  details { text-align: right; }
+  summary { direction: rtl; }
+  summary .where { margin-left: 0; margin-right: auto; }
+  details .body { padding: 0 54px 18px 18px; }
+  details[open] .body { padding: 4px 54px 18px 18px; max-height: none; }
+  .gotcha-list li { padding: 14px 36px 14px 18px; text-align: right; }
+  .gotcha-list li::before { left: auto; right: 14px; }
+  .contents-section { max-width: 760px; }
+  .chapter-list { margin: 18px 0 0; padding: 0 24px 0 0; }
+  .chapter-list > li { padding: 10px 0 8px; border-top: 1px solid var(--gray-300); }
+  .chapter-list > li > a { display: flex; gap: 10px; align-items: flex-start; color: var(--slate); text-decoration: none; }
+  .chapter-list > li > a:hover .chapter-name { color: var(--clay); }
+  .chapter-preview { margin: 5px 0 0; color: var(--gray-500); font-size: 13px; }
+  .chapter-preview .source-line { margin-top: 4px; }
+  .source-line { max-width: 720px; margin: 14px 0 0; color: var(--gray-500); font-size: 11px; line-height: 1.7; direction: ltr; text-align: left; overflow-wrap: anywhere; }
+  .table-unit { max-width: 760px; margin: 24px 0; padding: 0 14px 12px 0; border-right: 2px solid var(--slate); }
+  .table-unit--analytic { border-color: var(--sky); }
+  .table-unit--framework { border-color: var(--slate); }
+  .table-unit--form { border-color: var(--clay); }
+  .table-unit-head { display: grid; grid-template-columns: minmax(86px, 112px) minmax(0, 1fr); gap: 14px; align-items: start; margin-bottom: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-300); }
+  .table-type { display: inline-block; padding: 4px 8px; border-radius: 2px; color: var(--ivory); background: var(--gray-700); font-size: 12px; font-weight: 700; text-align: center; }
+  .table-type--framework { background: var(--slate); }
+  .table-type--form { background: var(--clay); }
+  .table-type--analytic { background: var(--sky); }
+  .table-purpose-label, .column-guide-label { display: block; margin-bottom: 4px; color: var(--clay); font-size: 13px; font-weight: 700; }
+  .table-unit-head p { max-width: none; margin: 0; font-size: 14px; line-height: 1.8; }
+  .table-wrap { width: 100%; max-width: 100%; margin: 12px 0 16px; overflow-x: auto; overscroll-behavior-inline: contain; }
+  .table-wrap table, .example-table-wrap table { width: 100%; min-width: 540px; border-collapse: collapse; direction: rtl; font-size: 13px; line-height: 1.75; }
+  .table-wrap th, .table-wrap td, .example-table-wrap th, .example-table-wrap td { padding: 9px 10px; text-align: right; vertical-align: top; border-bottom: 1px solid var(--gray-300); }
+  .table-wrap th, .example-table-wrap th { color: var(--slate); background: var(--gray-100); font-weight: 700; }
+  .row-key { color: var(--slate); font-weight: 700; }
+  .column-guide { margin: 16px 0 10px; padding: 12px; background: var(--gray-100); border-top: 1px solid var(--gray-300); }
+  .column-guide dl { display: grid; grid-template-columns: minmax(90px, .55fr) minmax(0, 1.45fr); gap: 6px 12px; margin: 0; }
+  .column-guide dt { font-size: 12px; font-weight: 700; color: var(--slate); }
+  .column-guide dd { margin: 0; font-size: 12px; line-height: 1.65; }
+  .table-source-note { max-width: none; margin: 12px 0 0 !important; padding-top: 10px; border-top: 1px solid var(--gray-300); color: var(--gray-500); font-size: 11px; line-height: 1.65; }
+  .form-example { margin: 14px 0; padding: 12px; background: #fffefa; border: 1px solid var(--gray-300); border-right: 2px solid var(--clay); }
+  .form-example p { max-width: none; margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--gray-700); }
+  .example-kicker { display: block; margin-bottom: 6px; color: var(--slate); font-weight: 700; font-size: 13px; }
+  .table-form td.answer-space { min-width: 200px; height: 46px; background: #fffefa; }
+  .table-form td.input-cell { min-width: 200px; height: auto; }
+  .source-worksheet { margin: 0; }
+  .source-worksheet textarea { display: block; width: 100%; min-width: 160px; min-height: 58px; resize: vertical; border: 1px solid var(--gray-300); padding: 8px; background: #fffefa; color: var(--slate); font: 14px/1.8 var(--sans); }
+  .source-worksheet textarea:focus { outline: 2px solid var(--oat); border-color: var(--clay); }
+  .diagram { max-width: 760px; margin: 22px 0; padding: 14px; background: var(--gray-100); border: 1px solid var(--gray-300); text-align: center; }
+  .diagram-svg { display: block; width: 100%; max-width: 680px; height: auto; max-height: 620px; margin: 0 auto; }
+  .edge { fill: none; stroke: #9aa8ba; stroke-width: 1.6; }
+  .node { fill: #fff; stroke: #aab0b0; stroke-width: 1.1; }
+  .node-label { font-family: "Vazirmatn", sans-serif; font-size: 14px; fill: #263b52; }
+  .finding-highlight { max-width: 680px; margin: 10px 0; padding: 10px 14px; border-right: 3px solid var(--clay); background: var(--gray-100); color: var(--slate); font-weight: 700; }
+  .menu-toggle, .nav-backdrop { display: none; }
+  .storage-note { max-width: 680px; color: var(--rust); font-size: 12px; }
+  [data-reader-chapter] { scroll-margin-top: 96px; }
+  @media (max-width: 920px) {
+    .page { display: block; max-width: 820px; padding: 0 20px; }
+    nav { display: block; position: fixed; z-index: 40; left: 0; top: 0; bottom: 0; width: min(340px, 88vw); height: auto; padding: 26px 18px 32px 10px; background: var(--ivory); border: 0; border-right: 1px solid var(--gray-300); border-left: 0; transform: translateX(-105%); transition: transform .2s ease; overflow-y: auto; }
+    .page.nav-open nav { transform: translateX(0); }
+    .nav-backdrop { position: fixed; z-index: 35; inset: 0; display: block; border: 0; background: rgba(20,20,19,.28); opacity: 0; pointer-events: none; }
+    .page.nav-open .nav-backdrop { opacity: 1; pointer-events: auto; }
+    .menu-toggle { display: inline-block; }
+    .top-bar { margin: 0 -20px; padding: 0 20px; }
+    .top-bar-inner { min-height: 48px; }
+    main { padding: 22px 0 90px; }
+    .reader-tools { top: 0; margin: -22px 0 22px; padding: 9px 0; }
+    .reader-tools .reading-status { flex-basis: 100%; order: 2; }
+    .reader-tools .progress-track { order: 3; }
+  }
+  @media (max-width: 560px) {
+    .page { padding: 0 14px; }
+    .top-bar { margin: 0 -14px; padding: 0 14px; }
+    .top-bar .crumbs { font-size: 10px; }
+    main { padding-top: 18px; }
+    .reader-tools { gap: 5px; margin-top: -18px; }
+    .tool-button, .menu-toggle { padding: 6px 8px; font-size: 12px; }
+    .reading-status { min-width: 0; }
+    .table-unit-head { grid-template-columns: 1fr; gap: 8px; }
+    .column-guide dl { grid-template-columns: 1fr; gap: 3px; }
+    .column-guide dd { margin-bottom: 6px; }
+    .reader-section .chapter-title { font-size: 26px; }
+    .table-wrap, .example-table-wrap { max-width: 100%; overflow-x: auto; }
+    .reader-section { margin-bottom: 34px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: .01ms !important; }
+  }
+</style>
+<meta name="theme-color" content="#FAF9F5">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div class="page">
+
+  <!-- ── top bar ── -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo-mark">پ</div>
+      <div>گزارش پژوهش <span>/</span> طراحی گرافیک</div>
+</div>
+  </div>
+
+  <!-- ── side nav ── -->
+  <nav>
+    <div class="nav-label">ON THIS REPORT</div>
+    <a href="#chapter-01" data-nav="01" data-chapter-link="01"><span class="nav-no">01</span><span>فصل اول — این پژوهش قرار است چه مسئله‌ای را حل کند؟</span></a><a href="#chapter-02" data-nav="02" data-chapter-link="02"><span class="nav-no">02</span><span>فصل دوم — مبنای پژوهش و نحوه خواندن داده‌ها</span></a><a href="#preview-03" data-nav="03" data-chapter-link="03"><span class="nav-no">03</span><span>فصل سوم — بازار در چه مدل‌هایی بازی می‌کند؟</span></a><a href="#chapter-04" data-nav="04" data-chapter-link="04"><span class="nav-no">04</span><span>فصل چهارم — ما با یک مخاطب طرف نیستیم</span></a><a href="#chapter-05" data-nav="05" data-chapter-link="05"><span class="nav-no">05</span><span>فصل پنجم — از کامنت‌ها چه چیزی درباره رفتار مخاطب می‌فهمیم؟</span></a><a href="#preview-06" data-nav="06" data-chapter-link="06"><span class="nav-no">06</span><span>فصل ششم — اسکریپت‌ها چگونه توجه، تعامل و ارزش می‌سازند؟</span></a><a href="#preview-07" data-nav="07" data-chapter-link="07"><span class="nav-no">07</span><span>فصل هفتم — مسئله‌های واقعی مخاطب</span></a><a href="#preview-08" data-nav="08" data-chapter-link="08"><span class="nav-no">08</span><span>فصل هشتم — مناطق اشباع و مناطق سفید واقعی بازار</span></a><a href="#preview-09" data-nav="09" data-chapter-link="09"><span class="nav-no">09</span><span>فصل نهم — مسیرهای استراتژیک ممکن و منطق انتخاب</span></a><a href="#preview-10" data-nav="10" data-chapter-link="10"><span class="nav-no">10</span><span>فصل دهم — جایگاه پیشنهادی و ستون‌های استراتژیک صفحه</span></a><a href="#preview-11" data-nav="11" data-chapter-link="11"><span class="nav-no">11</span><span>فصل یازدهم — نقش هر نوع محتوا و اثری که باید ایجاد کند</span></a><a href="#preview-12" data-nav="12" data-chapter-link="12"><span class="nav-no">12</span><span>فصل دوازدهم — معماری فرمت، سناریو، قلاب و دعوت به اقدام</span></a><a href="#chapter-13" data-nav="13" data-chapter-link="13"><span class="nav-no">13</span><span>فصل سیزدهم — نمونه‌کار، فرآیند، شواهد و طراحی در دنیای واقعی</span></a><a href="#preview-14" data-nav="14" data-chapter-link="14"><span class="nav-no">14</span><span>فصل چهاردهم — سیستم اجرا، اندازه‌گیری، یادگیری و پرسشنامه نهایی</span></a></nav>
+
+  <button class="nav-backdrop" id="nav-backdrop" type="button" aria-label="بستن فهرست فصل‌ها"></button><!-- ── main ── -->
+  <main>
+    <div class="reader-tools" aria-label="ابزار مطالعه">
+<button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="chapter-nav">فصل‌ها</button><button class="tool-button" id="search-toggle" type="button" aria-label="نمایش جست‌وجوی متن">جست‌وجو</button><button class="tool-button" id="text-down" type="button" aria-label="کوچک‌کردن متن">A−</button><button class="tool-button" id="text-reset" type="button" aria-label="اندازه متن معمولی">A</button><button class="tool-button" id="text-up" type="button" aria-label="بزرگ‌کردن متن">A+</button><div class="reading-status" aria-live="polite">
+<span class="active-chapter" id="active-chapter">جلد گزارش</span> · پیشرفت فصل <span id="progress-percent">۰٪</span>
+</div>
+<div class="progress-track" role="progressbar" aria-label="پیشرفت فصل جاری" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track"><div class="progress-value" id="progress-value"></div></div>
+<form id="search-panel" role="search" hidden="hidden">
+<label for="search-input">جست‌وجو در متن نمونهٔ گزارش</label><div class="search-row">
+<input id="search-input" type="search" autocomplete="off"><button class="tool-button" type="submit">بگرد</button>
+</div>
+<div id="search-results" aria-live="polite" role="status"></div>
+</form>
+</div>
+<header id="report-cover"><div class="eyebrow">گزارش پژوهش و استراتژی</div>
+<h1>پژوهش جامع بازار، مخاطب، رقبا و معماری استراتژیک صفحه طراحی گرافیک</h1>
+<div class="tldr" id="cover-summary">
+<b>نسخهٔ Prototype</b> — نسخه مرجع — سپتامبر ۲۰۲۶ · پژوهش بازار · مخاطب · محتوا · خواندن پیوسته و عمودی<a class="start-reading" href="#chapter-01">شروع خواندن</a>
+</div></header><section class="reader-section contents-section" id="contents"><h2 id="contents-heading">فهرست مطالب</h2>
+<p>فصل‌های گزارش بر اساس عنوان و متن آغازین خودِ پژوهش فهرست شده‌اند. این نمونه فقط بخش‌های منتخب را صفحه‌آرایی می‌کند.</p>
+<ol class="chapter-list">
+<li><a href="#chapter-01" data-chapter-link="01"><span class="chapter-number">01</span><span class="chapter-name">فصل اول — این پژوهش قرار است چه مسئله‌ای را حل کند؟</span></a></li>
+<li><a href="#chapter-02" data-chapter-link="02"><span class="chapter-number">02</span><span class="chapter-name">فصل دوم — مبنای پژوهش و نحوه خواندن داده‌ها</span></a></li>
+<li>
+<a href="#preview-03" data-chapter-link="03"><span class="chapter-number">03</span><span class="chapter-name">فصل سوم — بازار در چه مدل‌هایی بازی می‌کند؟</span></a><div id="preview-03" class="chapter-preview" data-reader-chapter="03">
+<p>چند مدل مختلف هم‌زمان در آن فعال‌اند و هرکدام ارزش را به شیوه‌ای متفاوت تولید می‌کنند.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 03 · سطرهای 258–437</p>
+</div>
+</li>
+<li><a href="#chapter-04" data-chapter-link="04"><span class="chapter-number">04</span><span class="chapter-name">فصل چهارم — ما با یک مخاطب طرف نیستیم</span></a></li>
+<li><a href="#chapter-05" data-chapter-link="05"><span class="chapter-number">05</span><span class="chapter-name">فصل پنجم — از کامنت‌ها چه چیزی درباره رفتار مخاطب می‌فهمیم؟</span></a></li>
+<li>
+<a href="#preview-06" data-chapter-link="06"><span class="chapter-number">06</span><span class="chapter-name">فصل ششم — اسکریپت‌ها چگونه توجه، تعامل و ارزش می‌سازند؟</span></a><div id="preview-06" class="chapter-preview" data-reader-chapter="06">
+<p>آنچه محتوا را مؤثر می‌کند فقط موضوع نیست؛ مسیر انتقال مسئله تا نتیجه است.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 06 · سطرهای 866–1127</p>
+</div>
+</li>
+<li>
+<a href="#preview-07" data-chapter-link="07"><span class="chapter-number">07</span><span class="chapter-name">فصل هفتم — مسئله‌های واقعی مخاطب</span></a><div id="preview-07" class="chapter-preview" data-reader-chapter="07">
+<p class="chapter-deck">موضوعاتی مانند فونت، لوگو، رنگ، بسته‌بندی و هوش مصنوعی در ظاهر از هم جدا هستند.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 07 · سطرهای 1128–1443</p>
+</div>
+</li>
+<li>
+<a href="#preview-08" data-chapter-link="08"><span class="chapter-number">08</span><span class="chapter-name">فصل هشتم — مناطق اشباع و مناطق سفید واقعی بازار</span></a><div id="preview-08" class="chapter-preview" data-reader-chapter="08">
+<p>«هر دو زیبا هستند؛ اما فقط یکی برای این کاربرد انتخاب منطقی‌تری است. چرا؟»</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 08 · سطرهای 1444–1569</p>
+</div>
+</li>
+<li>
+<a href="#preview-09" data-chapter-link="09"><span class="chapter-number">09</span><span class="chapter-name">فصل نهم — مسیرهای استراتژیک ممکن و منطق انتخاب</span></a><div id="preview-09" class="chapter-preview" data-reader-chapter="09">
+<p class="chapter-deck">قبل از اینکه مسیر پیشنهادی را بگوییم، باید مسیرهای ممکن را بشناسیم.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 09 · سطرهای 1570–1834</p>
+</div>
+</li>
+<li>
+<a href="#preview-10" data-chapter-link="10"><span class="chapter-number">10</span><span class="chapter-name">فصل دهم — جایگاه پیشنهادی و ستون‌های استراتژیک صفحه</span></a><div id="preview-10" class="chapter-preview" data-reader-chapter="10">
+<p>صفحه‌ای درباره طراحی گرافیک که فقط خروجی زیبا یا آموزش ابزار نشان نمی‌دهد؛ بلکه به مخاطب کمک می‌کند مسئله‌های واقعی طراحی را بفهمد، تصمیم درست‌تری بگیرد و طراحی را در عمل بهتر اجرا کند.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 10 · سطرهای 1835–2034</p>
+</div>
+</li>
+<li>
+<a href="#preview-11" data-chapter-link="11"><span class="chapter-number">11</span><span class="chapter-name">فصل یازدهم — نقش هر نوع محتوا و اثری که باید ایجاد کند</span></a><div id="preview-11" class="chapter-preview" data-reader-chapter="11">
+<p class="chapter-deck">یکی از اشتباهات رایج این است که فکر کنیم هر پست باید هم‌زمان بازدید، آموزش، اعتماد، فروش و تعامل ایجاد کند.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 11 · سطرهای 2035–2272</p>
+</div>
+</li>
+<li>
+<a href="#preview-12" data-chapter-link="12"><span class="chapter-number">12</span><span class="chapter-name">فصل دوازدهم — معماری فرمت، سناریو، قلاب و دعوت به اقدام</span></a><div id="preview-12" class="chapter-preview" data-reader-chapter="12">
+<p>«این دو لوگو را فقط از نظر زیبایی مقایسه نکنیم؛ خوانایی، تمایز و قابلیت استفاده را بررسی کنیم.»</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 12 · سطرهای 2273–2441</p>
+</div>
+</li>
+<li><a href="#chapter-13" data-chapter-link="13"><span class="chapter-number">13</span><span class="chapter-name">فصل سیزدهم — نمونه‌کار، فرآیند، شواهد و طراحی در دنیای واقعی</span></a></li>
+<li>
+<a href="#preview-14" data-chapter-link="14"><span class="chapter-number">14</span><span class="chapter-name">فصل چهاردهم — سیستم اجرا، اندازه‌گیری، یادگیری و پرسشنامه نهایی</span></a><div id="preview-14" class="chapter-preview" data-reader-chapter="14">
+<p>جمع‌آوری → انتخاب مسئله → تعیین مخاطب → تعیین زاویه → تعیین نقش محتوا → انتخاب شواهد → فرمت → سناریو → قلاب → تولید → کنترل کیفیت → انتشار → اندازه‌گیری → یادگیری</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 14 · سطرهای 3122–3238</p>
+</div>
+</li>
+</ol></section><section class="reader-section" id="introduction"><div class="eyebrow">فصل 01 · معرفی</div>
+<div class="chapter-opener">
+<span class="chapter-kicker">پژوهش · فصل 01</span><h1 class="chapter-title">
+<span class="chapter-index">01</span><span>فصل اول — این پژوهش قرار است چه مسئله‌ای را حل کند؟</span>
+</h1>
+<div class="opener-rule"></div>
+<div class="chapter-question">
+<span>پرسش فصل</span><p>بنابراین پرسش اصلی این پژوهش این نیست که «چه موضوعاتی پرطرفدارند؟»</p>
+</div>
+</div>
+<p class="chapter-deck">این سند قرار نیست در پایان به یک فهرست سی‌تایی از ایده‌های محتوا ختم شود و تمام شود. مسئله اصلی، پیش از ایده، این است که بدانیم چرا یک محتوا باید ساخته شود، برای چه کسی ساخته می‌شود، چه مشکلی را حل می‌کند، چه چیزی را ثابت می‌کند و قرار است چه تغییری در رفتار مخاطب ایجاد کند.</p>
+<p>در بازار طراحی گرافیک، انتخاب موضوع کار سختی نیست. می‌توان از لوگو گفت، فونت نشان داد، یک ترفند فتوشاپی ساخت، هوش مصنوعی معرفی کرد، نمونه‌کار گذاشت، یک بسته‌بندی زیبا نمایش داد یا یک میم ساخت. مسئله زمانی شروع می‌شود که بخواهیم از میان این همه گزینه بفهمیم کدام محتوا برای این صفحه، برای این مخاطب، در این مرحله و با این هدف، انتخاب درست‌تری است.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 01 · سطرهای 74–138</p></section><section class="reader-section" id="chapter-01" data-reader-chapter="01"><div class="eyebrow">فصل 01 · از موضوع تا مسئله</div>
+<section class="highlight-page"><span class="highlight-kicker">یافته کلیدی · فصل ۰۱</span><p class="finding-highlight">به همین دلیل، موضوع به‌تنهایی واحد استراتژی نیست.</p></section>
+<p>«لوگو»، «فونت»، «بسته‌بندی»، «فتوشاپ» و «هوش مصنوعی» فقط موضوع‌اند. چیزی که به آن‌ها ارزش استراتژیک می‌دهد، مسئله‌ای است که از طریق آن موضوع حل می‌کنیم.</p>
+<p>مثلاً «فونت» می‌تواند حداقل چهار محتوای کاملاً متفاوت باشد:</p>
+<p>یک معرفی منبع برای پیدا کردن فونت.</p>
+<p>یک آموزش نرم‌افزاری برای مدیریت فونت.</p>
+<p>یک شوخی درباره انتخاب بی‌پایان فونت.</p>
+<p>یا یک محتوای عمیق‌تر درباره اینکه چرا یک فونت برای یک پروژه درست است و برای پروژه‌ای دیگر نه.</p>
+<p>هر چهار مورد درباره فونت هستند، اما چهار مسئله متفاوت را هدف می‌گیرند و چهار اثر متفاوت دارند.</p>
+<p>بنابراین پرسش اصلی این پژوهش این نیست که «چه موضوعاتی پرطرفدارند؟»</p>
+<p>پرسش این است:</p>
+<p>مخاطب در چه نقطه‌ای از کار، تصمیم، زندگی حرفه‌ای یا خرید خود گیر می‌کند و صفحه چگونه می‌تواند در همان نقطه برای او ارزش ایجاد کند؟</p>
+<hr class="section-rule">
+<div class="visual-package">
+<span class="package-mark">بسته بصری</span><h2>بسته بصری فصل 01</h2>
+</div>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 01 · سطرهای 74–138</p></section><section class="reader-section" id="chapter-02" data-reader-chapter="02"><div class="eyebrow">فصل 02 · مبنای پژوهش و خواندن داده‌ها</div>
+<div class="chapter-opener">
+<span class="chapter-kicker">پژوهش · فصل 02</span><h1 class="chapter-title">
+<span class="chapter-index">02</span><span>فصل دوم — مبنای پژوهش و نحوه خواندن داده‌ها</span>
+</h1>
+<div class="opener-rule"></div>
+<div class="chapter-question">
+<span>پرسش فصل</span><p>این تفکیک مهم است، چون در این سند چند سطح مختلف داریم. مثلاً اینکه افراد «اولی یا دومی؟</p>
+</div>
+</div>
+<p class="chapter-deck">این پژوهش بر چند منبع اصلی بنا شده است: مجموعه بزرگ کامنت‌های خام پروژه، گزارش استخراج فایل‌ها، تحلیل ۵۱ محتوای ویدیویی، دو سند تحلیل اسکریپت و تدوین، سند تحلیل و سناریونویسی محتوای طراحی گرافیک، و پژوهش بازار و رقبا.</p>
+<p>فایل خام کامنت‌ها به‌تنهایی یک معدن داده است، اما نباید با آن مثل یک نظرسنجی رسمی برخورد کرد. تعداد زیاد یک عبارت الزاماً به معنی اهمیت استراتژیک آن نیست. بخشی از کامنت‌ها تکراری‌اند، بخشی صرفاً واکنش عاطفی‌اند و بخشی به‌صورت مکانیکی در پاسخ به درخواست یک پیج ثبت شده‌اند.</p>
+<p>برای مثال، در یکی از خوشه‌ها ده‌ها هزار واکنش پیرامون یک کلیدواژه تکرار شده است. این می‌تواند نشان دهد ساختار دعوت به اقدام توانسته مشارکت مکانیکی تولید کند، اما نمی‌توان از آن نتیجه گرفت که همان کلیدواژه یکی از مهم‌ترین نیازهای عمیق مخاطب است.</p>
+<p>در مقابل، یک کامنت بلند که در آن مخاطب درباره قیمت، فرآیند، فایل، چاپ، مشتری یا اجرای واقعی سؤال می‌کند، ممکن است از نظر استراتژیک ارزش بیشتری داشته باشد، حتی اگر تعداد چنین کامنت‌هایی بسیار کمتر باشد.</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 02 · سطرهای 139–257</p></section><section class="reader-section" id="chapter-02-table" data-reader-chapter="02"><div class="eyebrow">فصل 02 · جدول · لایه‌های خوانش داده</div>
+<h3 class="visual-caption">جدول | لایه‌های خوانش داده</h3>
+<section class="table-unit table-unit--framework"><div class="table-unit-head">
+<span class="table-type table-type--framework">چارچوب کاری</span><div>
+<span class="table-purpose-label">این جدول برای چیست؟</span><p>مرز داده، مشاهده، تفسیر، فرضیه و تصمیم را روشن می‌کند تا برداشت تحلیلی با داده خام اشتباه نشود.</p>
+</div>
+</div>
+<div class="table-wrap table-framework"><table>
+<thead><tr>
+<th>لایه</th>
+<th>سؤال</th>
+<th>نمونه خروجی</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="row-key">داده</td>
+<td>دقیقاً چه چیزی ثبت شده؟</td>
+<td>تعداد کامنت، سؤال، فایل، نمونه</td>
+</tr>
+<tr>
+<td class="row-key">مشاهده</td>
+<td>چه الگویی دیده می‌شود؟</td>
+<td>تکرار سؤال درباره فایل لایه‌باز</td>
+</tr>
+<tr>
+<td class="row-key">تفسیر</td>
+<td>این الگو چه معنایی دارد؟</td>
+<td>نیاز به کاربرد واقعی</td>
+</tr>
+<tr>
+<td class="row-key">فرضیه</td>
+<td>چه چیزی ارزش آزمون دارد؟</td>
+<td>محتوای قضاوتی می‌تواند تقاضا بسازد</td>
+</tr>
+<tr>
+<td class="row-key">تصمیم</td>
+<td>چه کاری انجام می‌دهیم؟</td>
+<td>تولید یک الگوی محتوایی مشخص</td>
+</tr>
+</tbody>
+</table></div>
+<div class="column-guide">
+<span class="column-guide-label">راهنمای ستون‌ها</span><dl>
+<dt>لایه</dt>
+<dd>سطح خوانش را از داده تا تصمیم مشخص کنید؛ بین مشاهده و تفسیر جابه‌جا نشوید.</dd>
+<dt>سؤال</dt>
+<dd>پرسش کنترل را بدون تبدیل آن به پاسخ ازپیش‌تعیین‌شده نگه دارید.</dd>
+<dt>نمونه خروجی</dt>
+<dd>نمونه‌ای را ثبت کنید که در خود پژوهش یا پروژه مشاهده شده است.</dd>
+</dl>
+</div>
+<p class="table-source-note">مبنا: گزارش روش و داده‌های داخلی همین پژوهش؛ محدودیت‌ها و اختلاف شمارش‌ها در متن فصل آمده‌اند.</p></section>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 02 · سطرهای 139–257</p></section><section class="reader-section" id="chapter-02-worksheet" data-reader-chapter="02"><div class="eyebrow">فصل 02 · فرم · برگهٔ ثبت یافته</div>
+<h3 class="visual-caption">فرم | برگه ثبت یافته</h3>
+<section class="table-unit table-unit--form"><div class="table-unit-head">
+<span class="table-type table-type--form">فرم اجرایی</span><div>
+<span class="table-purpose-label">این جدول برای چیست؟</span><p>یافته را همراه منبع و سطح اطمینان ثبت می‌کند؛ خروجی، یک فرضیه قابل‌آزمون است، نه نتیجه قطعی.</p>
+</div>
+</div>
+<aside class="form-example"><span class="example-kicker">نمونه تکمیل‌شده از متن پژوهش</span><p>این نمونه از عبارت‌ها و ردیف‌های موجود در پژوهش استخراج شده است؛ کیس مستقل یا داده تازه نیست. خانه‌هایی که پشتوانه مستقیم ندارند عمداً در نمونه نیامده‌اند.</p>
+<div class="example-table-wrap"><table class="example-table">
+<thead><tr>
+<th>فیلد</th>
+<th>نمونه مستند</th>
+<th>منبع در پژوهش</th>
+</tr></thead>
+<tbody>
+<tr>
+<th>منبع داده</th>
+<td>داده خام کامنت‌ها</td>
+<td>متن فصل ۲ و فصل ۵</td>
+</tr>
+<tr>
+<th>داده مشاهده‌شده</th>
+<td>«اولی یا دومی؟»</td>
+<td>متن فصل ۲</td>
+</tr>
+<tr>
+<th>فرضیه قابل آزمون</th>
+<td>مقایسه می‌تواند یکی از ستون‌های اصلی صفحه باشد</td>
+<td>متن فصل ۲؛ در خود متن به‌عنوان فرضیه معرفی شده</td>
+</tr>
+</tbody>
+</table></div></aside><form class="source-worksheet" data-worksheet="chapter-02"><div class="table-wrap table-form"><table>
+<thead><tr>
+<th>مورد</th>
+<th>پاسخ</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>منبع داده</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-02-01" aria-label="منبع داده" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>بازه / نمونه</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-02-02" aria-label="بازه / نمونه" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>داده مشاهده‌شده</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-02-03" aria-label="داده مشاهده‌شده" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>مشاهده</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-02-04" aria-label="مشاهده" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>تفسیر</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-02-05" aria-label="تفسیر" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>سطح اطمینان</td>
+<td class="answer-space input-cell">زیاد / متوسط / کم<textarea data-local-field="chapter-02-06" aria-label="سطح اطمینان" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>فرضیه قابل آزمون</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-02-07" aria-label="فرضیه قابل آزمون" rows="2"></textarea>
+</td>
+</tr>
+</tbody>
+</table></div></form>
+<div class="column-guide">
+<span class="column-guide-label">راهنمای ستون‌ها</span><dl>
+<dt>مورد</dt>
+<dd>موردی را ثبت کنید که منبع آن در دسترس باشد.</dd>
+<dt>پاسخ</dt>
+<dd>پاسخ را از صاحب داده یا سند معتبر دریافت کنید؛ پاسخ ساختگی وارد نکنید.</dd>
+</dl>
+</div>
+<p class="table-source-note">مبنا: داده‌های داخلی کامنت و گزارش تحلیل همین پژوهش؛ نمونه‌ها شاخص بازار عمومی نیستند.</p></section>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 02 · سطرهای 139–257</p></section><section class="reader-section" id="chapter-02-diagram" data-reader-chapter="02"><div class="eyebrow">فصل 02 · دیاگرام · زنجیرهٔ اعتبار</div>
+<h3 class="visual-caption">نمودار | زنجیره اعتبار</h3>
+<figure class="diagram"><svg class="diagram-svg" viewbox="0 0 340 606" role="img" aria-label="دیاگرام مفهومی" xmlns="http://www.w3.org/2000/svg"><defs><marker id="chapter-02-1-arrow" markerwidth="8" markerheight="8" refx="7" refy="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9AA8BA"></path></marker></defs><path class="edge" d="M135.0,74 C135.0,86.0 135.0,86.0 135.0,94" marker-end="url(#chapter-02-1-arrow)"></path><path class="edge" d="M135.0,156 C135.0,168.0 135.0,168.0 135.0,176" marker-end="url(#chapter-02-1-arrow)"></path><path class="edge" d="M135.0,238 C135.0,250.0 135.0,250.0 135.0,258" marker-end="url(#chapter-02-1-arrow)"></path><path class="edge" d="M135.0,320 C135.0,332.0 135.0,332.0 135.0,340" marker-end="url(#chapter-02-1-arrow)"></path><path class="edge" d="M135.0,402 C135.0,414.0 135.0,414.0 135.0,422" marker-end="url(#chapter-02-1-arrow)"></path><path class="edge" d="M135.0,484 C135.0,496.0 135.0,496.0 135.0,504" marker-end="url(#chapter-02-1-arrow)"></path><rect class="node" x="16.0" y="16" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="49.0" text-anchor="middle" direction="rtl">داده خام</text><rect class="node" x="16.0" y="98" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="122.5" text-anchor="middle" direction="rtl">تمیزکاری و</text><text class="node-label large-node-label" x="135.0" y="139.5" text-anchor="middle" direction="rtl">دسته‌بندی</text><rect class="node" x="16.0" y="180" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="213.0" text-anchor="middle" direction="rtl">مشاهده</text><rect class="node" x="16.0" y="262" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="295.0" text-anchor="middle" direction="rtl">تفسیر</text><rect class="node" x="16.0" y="344" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="377.0" text-anchor="middle" direction="rtl">فرضیه</text><rect class="node" x="16.0" y="426" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="459.0" text-anchor="middle" direction="rtl">تصمیم قابل آزمون</text><rect class="node" x="16.0" y="508" width="238" height="58" rx="9"></rect><text class="node-label large-node-label" x="135.0" y="541.0" text-anchor="middle" direction="rtl">نتیجه و یادگیری</text></svg></figure>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 02 · سطرهای 139–257</p></section><section class="reader-section" id="chapter-04" data-reader-chapter="04"><div class="eyebrow">فصل 04 · مخاطب و نقش‌ها</div>
+<div class="chapter-opener">
+<span class="chapter-kicker">پژوهش · فصل 04</span><h1 class="chapter-title">
+<span class="chapter-index">04</span><span>فصل چهارم — ما با یک مخاطب طرف نیستیم</span>
+</h1>
+<div class="opener-rule"></div>
+<div class="chapter-question">
+<span>پرسش فصل</span><p>«از کجا کار بگیریم؟»</p>
+</div>
+</div>
+<p class="chapter-deck">یکی از اصلاحات اساسی این نسخه این است که مخاطب را یک «پرسونا»ی واحد فرض نمی‌کنیم.</p>
+<p>در داده‌ها چند گروه با نیازهای متفاوت دیده می‌شوند و حتی یک نفر می‌تواند در زمان‌های مختلف در چند نقش قرار بگیرد.</p>
+<p>برای مثال یک طراح فریلنسر ممکن است امروز به‌عنوان «طراح» دنبال معیار انتخاب فونت باشد، فردا به‌عنوان «فریلنسر» دنبال روش مذاکره با مشتری باشد و هفته بعد به‌عنوان «صاحب کسب‌وکار» برای برند شخصی خودش درباره بسته‌بندی تحقیق کند.</p>
+<p>پس «مخاطب» بهتر است با نقش و وضعیت تعریف شود، نه فقط با سن و شغل.</p>
+<p>گروه اول: مخاطب هسته و ایده‌آل</p>
+<p>این گروه همان کسانی هستند که طراحی را به‌صورت جدی دنبال می‌کنند یا انجام می‌دهند:</p>
+<p>طراح گرافیک، فریلنسر، طراح تازه‌کار، دانشجوی گرافیک یا فردی که در حال تبدیل مهارت طراحی به کار حرفه‌ای است.</p>
+<p>نیازهای این گروه فقط یادگیری ابزار نیست.</p>
+<p>در کامنت‌های واقعی این گروه، هم سؤال‌های فنی دیده می‌شود، هم بحث درباره کیفیت، پروژه گرفتن، مشتری، قیمت، فایل و قضاوت طراحی.</p>
+<p>مثلاً در یک خوشه از کامنت‌ها، فرد فقط نمی‌پرسد ابزار چیست؛ می‌پرسد:</p>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 04 · سطرهای 438–608</p></section><section class="reader-section" id="chapter-05" data-reader-chapter="05"><div class="eyebrow">فصل 05 · Comment Intelligence · رفتار در کامنت‌ها</div>
+<p>چیزی که ارزش بیشتری دارد، نوع پرسشی است که مخاطب بعد از دیدن محتوا مطرح می‌کند.</p>
+<p>این پرسش‌ها را می‌توان به چند خانواده تقسیم کرد.</p>
+<div class="callout">
+<span class="ico" aria-hidden="true">✦</span><div>
+<p class="chapter-deck">مهم‌ترین کشف کامنت‌ها این نیست که «لوگو محبوب است» یا «فونت محبوب است».</p>
+</div>
+</div>
+<details><summary><span class="step-no">۱</span></summary>سؤال کاربردی فوری<div class="body">
+<p>نمونه:</p>
+<p>«اسم سایت اول چیه؟»</p>
+<p>«کسی کار با این سایت بلده؟»</p>
+<p>«چرا ارور میده؟»</p>
+<p>این رفتار به ما می‌گوید مخاطب می‌خواهد چیزی را الان حل کند.</p>
+</div></details><section class="table-unit table-unit--analytic"><div class="table-unit-head">
+<span class="table-type table-type--analytic">تحلیلی</span><div>
+<span class="table-purpose-label">این جدول برای چیست؟</span><p>نمونه رفتارهای ثبت‌شده را به نوع سیگنال و کاربرد محتوایی وصل می‌کند؛ این دسته‌بندی، آمار عمومی بازار نیست.</p>
+</div>
+</div>
+<div class="table-wrap table-analytic"><table>
+<thead><tr>
+<th>نوع کامنت</th>
+<th>مثال رفتاری</th>
+<th>چه چیزی می‌گوید؟</th>
+<th>کاربرد استراتژیک</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="row-key">کاربردی فوری</td>
+<td>«اسم سایت؟»</td>
+<td>نیاز فوری</td>
+<td>محتوای حل مسئله</td>
+</tr>
+<tr>
+<td class="row-key">خروجی/اجرا</td>
+<td>«چطور چاپش کنیم؟»</td>
+<td>دغدغه دنیای واقعی</td>
+<td>محتوای کاربرد و واقعیت</td>
+</tr>
+<tr>
+<td class="row-key">انتخاب</td>
+<td>«اولی/دومی»</td>
+<td>نیاز به معیار</td>
+<td>محتوای قضاوت</td>
+</tr>
+<tr>
+<td class="row-key">تجاری</td>
+<td>«قیمت؟»</td>
+<td>قصد یا توجه خرید</td>
+<td>پل به تجارت</td>
+</tr>
+<tr>
+<td class="row-key">اعتراض/اصلاح</td>
+<td>«این برای چاپ مشکل دارد»</td>
+<td>معیار حرفه‌ای</td>
+<td>محتوای اثبات و اصلاح</td>
+</tr>
+<tr>
+<td class="row-key">گفت‌وگویی</td>
+<td>بحث چندمرحله‌ای</td>
+<td>مسئله چندلایه</td>
+<td>مطالعه موردی/تحلیل</td>
+</tr>
+</tbody>
+</table></div>
+<div class="column-guide">
+<span class="column-guide-label">راهنمای ستون‌ها</span><dl>
+<dt>نوع کامنت</dt>
+<dd>نوع رفتاری را با دسته‌بندی پژوهش هماهنگ کنید.</dd>
+<dt>مثال رفتاری</dt>
+<dd>عبارت یا رفتار واقعی را عیناً یا با خلاصه وفادار ثبت کنید.</dd>
+<dt>چه چیزی می‌گوید؟</dt>
+<dd>تفسیر پیشنهادی پژوهش را از خود مشاهده جدا نگه دارید.</dd>
+<dt>کاربرد استراتژیک</dt>
+<dd>کارکرد محتوایی پیشنهادی را ثبت کنید؛ آن را به نتیجه قطعی تبدیل نکنید.</dd>
+</dl>
+</div>
+<p class="table-source-note">مبنا: داده‌های داخلی کامنت و گزارش تحلیل همین پژوهش؛ نمونه‌ها شاخص بازار عمومی نیستند.</p></section>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 05 · سطرهای 609–865</p></section><section class="reader-section" id="chapter-13" data-reader-chapter="13"><div class="eyebrow">فصل 13 · نردبان شواهد</div>
+<p class="chapter-deck">نمونه‌کار برای این صفحه حذف نمی‌شود.</p>
+<h3 class="visual-caption">جدول | نردبان شواهد</h3>
+<section class="table-unit table-unit--framework"><div class="table-unit-head">
+<span class="table-type table-type--framework">چارچوب کاری</span><div>
+<span class="table-purpose-label">این جدول برای چیست؟</span><p>سطح شاهد را با قدرت ادعا تطبیق می‌دهد؛ ادعا نباید از شواهد ارائه‌شده قوی‌تر باشد.</p>
+</div>
+</div>
+<div class="table-wrap table-framework"><table>
+<thead><tr>
+<th>سطح</th>
+<th>شواهد</th>
+<th>قدرت ادعا</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="row-key">E0</td>
+<td>ادعا فقط</td>
+<td>پایین</td>
+</tr>
+<tr>
+<td class="row-key">E1</td>
+<td>خروجی نهایی</td>
+<td>پایین تا متوسط</td>
+</tr>
+<tr>
+<td class="row-key">E2</td>
+<td>فرآیند</td>
+<td>متوسط</td>
+</tr>
+<tr>
+<td class="row-key">E3</td>
+<td>مقایسه/نسخه ردشده</td>
+<td>متوسط تا بالا</td>
+</tr>
+<tr>
+<td class="row-key">E4</td>
+<td>کاربرد در محیط واقعی</td>
+<td>بالا</td>
+</tr>
+<tr>
+<td class="row-key">E5</td>
+<td>نتیجه قابل مشاهده</td>
+<td>بسیار بالا</td>
+</tr>
+</tbody>
+</table></div>
+<div class="column-guide">
+<span class="column-guide-label">راهنمای ستون‌ها</span><dl>
+<dt>سطح</dt>
+<dd>سطح شواهد را بر اساس آنچه واقعاً قابل مشاهده است انتخاب کنید.</dd>
+<dt>شواهد</dt>
+<dd>مدرک قابل بررسی را ذکر کنید؛ ادعا به‌تنهایی شاهد نیست.</dd>
+<dt>قدرت ادعا</dt>
+<dd>قدرت ادعا را محدود به سطح شاهد نگه دارید.</dd>
+</dl>
+</div>
+<p class="table-source-note">نوع محتوا: چارچوب تحلیلی این پژوهش؛ داده بازار یا نتیجه رسمی مستقل نیست.</p></section>
+<figure class="diagram diagram--evidence"><svg class="diagram-svg evidence-ladder" viewbox="0 0 580 378" role="img" aria-label="نردبان شواهد از E0 تا E5" xmlns="http://www.w3.org/2000/svg"><defs><marker id="chapter-13-1-evidence-arrow" markerwidth="8" markerheight="8" refx="7" refy="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#B67543"></path></marker></defs><rect class="evidence-node" x="74" y="10" width="478" height="48" rx="6"></rect><rect class="evidence-level" x="74" y="10" width="58" height="48" rx="6"></rect><text class="evidence-level-text" x="103" y="40" text-anchor="middle">E0</text><text class="evidence-copy" x="342.0" y="30" text-anchor="middle" direction="rtl">ادعا فقط</text><text class="evidence-strength" x="342.0" y="47" text-anchor="middle" direction="rtl">پایین</text><line class="evidence-edge" x1="313.0" y1="58" x2="313.0" y2="69" marker-end="url(#chapter-13-1-evidence-arrow)"></line><rect class="evidence-node" x="74" y="71" width="478" height="48" rx="6"></rect><rect class="evidence-level" x="74" y="71" width="58" height="48" rx="6"></rect><text class="evidence-level-text" x="103" y="101" text-anchor="middle">E1</text><text class="evidence-copy" x="342.0" y="91" text-anchor="middle" direction="rtl">خروجی نهایی</text><text class="evidence-strength" x="342.0" y="108" text-anchor="middle" direction="rtl">پایین تا متوسط</text><line class="evidence-edge" x1="313.0" y1="119" x2="313.0" y2="130" marker-end="url(#chapter-13-1-evidence-arrow)"></line><rect class="evidence-node" x="74" y="132" width="478" height="48" rx="6"></rect><rect class="evidence-level" x="74" y="132" width="58" height="48" rx="6"></rect><text class="evidence-level-text" x="103" y="162" text-anchor="middle">E2</text><text class="evidence-copy" x="342.0" y="152" text-anchor="middle" direction="rtl">فرآیند</text><text class="evidence-strength" x="342.0" y="169" text-anchor="middle" direction="rtl">متوسط</text><line class="evidence-edge" x1="313.0" y1="180" x2="313.0" y2="191" marker-end="url(#chapter-13-1-evidence-arrow)"></line><rect class="evidence-node" x="74" y="193" width="478" height="48" rx="6"></rect><rect class="evidence-level" x="74" y="193" width="58" height="48" rx="6"></rect><text class="evidence-level-text" x="103" y="223" text-anchor="middle">E3</text><text class="evidence-copy" x="342.0" y="213" text-anchor="middle" direction="rtl">مقایسه/نسخه ردشده</text><text class="evidence-strength" x="342.0" y="230" text-anchor="middle" direction="rtl">متوسط تا بالا</text><line class="evidence-edge" x1="313.0" y1="241" x2="313.0" y2="252" marker-end="url(#chapter-13-1-evidence-arrow)"></line><rect class="evidence-node" x="74" y="254" width="478" height="48" rx="6"></rect><rect class="evidence-level" x="74" y="254" width="58" height="48" rx="6"></rect><text class="evidence-level-text" x="103" y="284" text-anchor="middle">E4</text><text class="evidence-copy" x="342.0" y="274" text-anchor="middle" direction="rtl">کاربرد در محیط واقعی</text><text class="evidence-strength" x="342.0" y="291" text-anchor="middle" direction="rtl">بالا</text><line class="evidence-edge" x1="313.0" y1="302" x2="313.0" y2="313" marker-end="url(#chapter-13-1-evidence-arrow)"></line><rect class="evidence-node" x="74" y="315" width="478" height="48" rx="6"></rect><rect class="evidence-level" x="74" y="315" width="58" height="48" rx="6"></rect><text class="evidence-level-text" x="103" y="345" text-anchor="middle">E5</text><text class="evidence-copy" x="342.0" y="335" text-anchor="middle" direction="rtl">نتیجه قابل مشاهده</text><text class="evidence-strength" x="342.0" y="352" text-anchor="middle" direction="rtl">بسیار بالا</text></svg></figure>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 13 · سطرهای 2442–3121</p></section><section class="reader-section" id="chapter-13-evidence" data-reader-chapter="13"><div class="eyebrow">فصل 13 · Evidence · شواهد یک پروژه</div>
+<p class="chapter-deck">نمونه‌کار برای این صفحه حذف نمی‌شود.</p>
+<h3 class="visual-caption">فرم | Project Evidence Sheet</h3>
+<section class="table-unit table-unit--form"><div class="table-unit-head">
+<span class="table-type table-type--form">فرم اجرایی</span><div>
+<span class="table-purpose-label">این جدول برای چیست؟</span><p>شواهد یک پروژه را از درخواست اولیه تا نتیجه قابل‌مشاهده ثبت می‌کند تا روایت پروژه قابل‌بررسی باشد.</p>
+</div>
+</div>
+<aside class="form-example form-example--limited"><span class="example-kicker">نمونه تکمیل‌شده</span><p>منبع یک کیس پروژه با درخواست، محدودیت، اصلاح و نتیجه قابل‌انتساب به‌صورت کامل ثبت نکرده است. برای پرهیز از ساختن داده، نمونه فرضی اضافه نشده و فرم زیر برای تکمیل با داده همان پروژه باقی مانده است.</p></aside><form class="source-worksheet" data-worksheet="chapter-13-evidence"><div class="table-wrap table-form"><table>
+<thead><tr>
+<th>بخش</th>
+<th>ثبت شواهد</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>درخواست اولیه مشتری</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-01" aria-label="درخواست اولیه مشتری" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>محدودیت پروژه</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-02" aria-label="محدودیت پروژه" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>گزینه‌های بررسی‌شده</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-03" aria-label="گزینه‌های بررسی‌شده" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>گزینه ردشده و دلیل</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-04" aria-label="گزینه ردشده و دلیل" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>اصلاحات</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-05" aria-label="اصلاحات" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>تست واقعی</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-06" aria-label="تست واقعی" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>خروجی نهایی</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-07" aria-label="خروجی نهایی" rows="2"></textarea>
+</td>
+</tr>
+<tr>
+<td>نتیجه/بازخورد قابل نمایش</td>
+<td class="answer-space input-cell">______________________________<textarea data-local-field="chapter-13-evidence-08" aria-label="نتیجه/بازخورد قابل نمایش" rows="2"></textarea>
+</td>
+</tr>
+</tbody>
+</table></div></form>
+<div class="column-guide">
+<span class="column-guide-label">راهنمای ستون‌ها</span><dl>
+<dt>بخش</dt>
+<dd>بخش پروژه را مشخص کنید و شواهد مربوط به آن را درج کنید.</dd>
+<dt>ثبت شواهد</dt>
+<dd>مدرک، مشاهده یا نتیجه واقعی را ثبت کنید؛ نمونه فرضی ننویسید.</dd>
+</dl>
+</div>
+<p class="table-source-note">مبنا: تحلیل اسکریپت‌ها و محتوای ویدیویی داخلی گزارش؛ شواهد محدود به نمونه‌های بررسی‌شده‌اند.</p></section>
+<p class="source-line">منبع پژوهش: پژوهش_جامع_طراحی_گرافیک_نسخه_مرجع_آماده_PDF.md · فصل 13 · سطرهای 2442–3121</p></section></main>
+
+</div>
+
+<script>
+/* Tab switching */
+document.querySelectorAll("[data-tabs]").forEach(box => {
+  const btns = box.querySelectorAll("button");
+  const panes = box.querySelectorAll("pre");
+  btns.forEach(b => b.addEventListener("click", () => {
+    btns.forEach(x => x.classList.remove("on"));
+    panes.forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    panes[+b.dataset.t].classList.add("on");
+  }));
+});
+
+/* Active nav tracking */
+const sections = document.querySelectorAll("[data-reader-chapter]");
+const navLinks = document.querySelectorAll("nav a[data-nav]");
+function updateNav() {
+  let current = "";
+  sections.forEach(s => {
+    if (s.getBoundingClientRect().top <= 100) current = s.dataset.readerChapter || s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle("active", (a.dataset.nav === current || a.dataset.nav === current.replace("chapter-", "")));
+  });
+}
+window.addEventListener("scroll", updateNav, { passive: true });
+updateNav();
+
+
+/* Reader controls extend the template's navigation without changing its scroll-first model. */
+const shell = document.querySelector(".page");
+const chapterNav = document.querySelector("nav");
+const menuToggle = document.getElementById("menu-toggle");
+const navBackdrop = document.getElementById("nav-backdrop");
+const searchToggle = document.getElementById("search-toggle");
+const searchPanel = document.getElementById("search-panel");
+const searchInput = document.getElementById("search-input");
+const searchResults = document.getElementById("search-results");
+const activeChapterLabel = document.getElementById("active-chapter");
+const progressPercent = document.getElementById("progress-percent");
+const progressTrack = document.getElementById("progress-track");
+const progressValue = document.getElementById("progress-value");
+const chapterRegions = Array.from(document.querySelectorAll("[data-reader-chapter]"));
+const chaptersByNumber = new Map();
+
+document.querySelectorAll("nav a[data-nav]").forEach(link => {
+  const key = link.dataset.nav;
+  const name = link.querySelector("span:last-child").textContent.trim();
+  chaptersByNumber.set(key, name);
+});
+
+function closeMenu() {
+  shell.classList.remove("nav-open");
+  menuToggle.setAttribute("aria-expanded", "false");
+}
+menuToggle.addEventListener("click", () => {
+  const open = shell.classList.toggle("nav-open");
+  menuToggle.setAttribute("aria-expanded", String(open));
+});
+navBackdrop.addEventListener("click", closeMenu);
+chapterNav.addEventListener("click", event => {
+  if (event.target.closest("a")) closeMenu();
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeMenu();
+    searchPanel.hidden = true;
+    searchToggle.setAttribute("aria-expanded", "false");
+  }
+});
+
+searchToggle.addEventListener("click", () => {
+  searchPanel.hidden = !searchPanel.hidden;
+  searchToggle.setAttribute("aria-expanded", String(!searchPanel.hidden));
+  if (!searchPanel.hidden) searchInput.focus();
+});
+
+function normalizeSearch(value) {
+  return value.normalize("NFKC").replace(/[ي]/g, "ی").replace(/[ك]/g, "ک").toLowerCase();
+}
+searchPanel.addEventListener("submit", event => {
+  event.preventDefault();
+  const query = normalizeSearch(searchInput.value.trim());
+  searchResults.replaceChildren();
+  if (!query) {
+    searchResults.textContent = "عبارت جست‌وجو را وارد کنید.";
+    return;
+  }
+  let count = 0;
+  document.querySelectorAll(".reader-section, .chapter-preview").forEach(section => {
+    const content = section.textContent || "";
+    if (!normalizeSearch(content).includes(query)) return;
+    const heading = section.querySelector("h1, h2, h3, a")?.textContent.trim();
+    const excerpt = content.replace(/\s+/g, " ").trim().slice(0, 180);
+    const result = document.createElement("button");
+    result.type = "button";
+    result.textContent = `${heading || "بخش گزارش"} — ${excerpt}`;
+    result.addEventListener("click", () => {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (section.matches(".chapter-preview")) {
+        const chapter = section.dataset.readerChapter;
+        document.querySelector(`[data-chapter-link="${chapter}"]`)?.classList.add("active");
+      }
+    });
+    searchResults.append(result);
+    count += 1;
+  });
+  if (!count) searchResults.textContent = "نتیجه‌ای در متن نمونه پیدا نشد.";
+});
+
+let readerScale = 1;
+function applyScale() {
+  document.documentElement.style.setProperty("--reader-scale", String(readerScale));
+}
+document.getElementById("text-down").addEventListener("click", () => {
+  readerScale = Math.max(.85, Math.round((readerScale - .1) * 100) / 100);
+  applyScale();
+});
+document.getElementById("text-reset").addEventListener("click", () => {
+  readerScale = 1;
+  applyScale();
+});
+document.getElementById("text-up").addEventListener("click", () => {
+  readerScale = Math.min(1.4, Math.round((readerScale + .1) * 100) / 100);
+  applyScale();
+});
+
+function updateReadingProgress() {
+  const threshold = 220;
+  const passed = chapterRegions.filter(region => region.getBoundingClientRect().top <= threshold);
+  const current = passed[passed.length - 1];
+  if (!current) {
+    activeChapterLabel.textContent = window.scrollY < document.querySelector("header").offsetHeight ? "جلد گزارش" : "فهرست مطالب";
+    progressValue.style.width = "0%";
+    progressPercent.textContent = "۰٪";
+    progressTrack.setAttribute("aria-valuenow", "0");
+    document.querySelectorAll("nav a[data-nav]").forEach(link => link.classList.remove("active"));
+    return;
+  }
+  const chapter = current.dataset.readerChapter;
+  activeChapterLabel.textContent = chaptersByNumber.get(chapter) || `فصل ${chapter}`;
+  document.querySelectorAll("nav a[data-nav]").forEach(link => {
+    link.classList.toggle("active", link.dataset.nav === chapter);
+  });
+
+  const grouped = chapterRegions.filter(region => region.dataset.readerChapter === chapter);
+  const first = grouped[0];
+  const last = grouped[grouped.length - 1];
+  const start = first.getBoundingClientRect().top + window.scrollY;
+  const end = last.getBoundingClientRect().bottom + window.scrollY;
+  const currentPosition = window.scrollY + threshold;
+  const percent = end <= start ? 100 : Math.max(0, Math.min(100, Math.round((currentPosition - start) / (end - start) * 100)));
+  progressValue.style.width = `${percent}%`;
+  progressPercent.textContent = `${new Intl.NumberFormat("fa-IR").format(percent)}٪`;
+  progressTrack.setAttribute("aria-valuenow", String(percent));
+}
+window.addEventListener("scroll", updateReadingProgress, { passive: true });
+window.addEventListener("resize", updateReadingProgress);
+updateReadingProgress();
+
+const storageNote = document.createElement("p");
+storageNote.className = "storage-note";
+storageNote.setAttribute("role", "status");
+storageNote.hidden = true;
+document.querySelector("main").append(storageNote);
+function showStorageError(error) {
+  storageNote.hidden = false;
+  storageNote.textContent = `ذخیرهٔ محلی فرم در این مرورگر انجام نشد (${error.name}). صفحه را می‌توانید بخوانید، اما پاسخ فرم ماندگار نخواهد بود.`;
+}
+document.querySelectorAll("[data-local-field]").forEach(field => {
+  const key = `phase1-${field.dataset.localField}`;
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved !== null) field.value = saved;
+  } catch (error) {
+    showStorageError(error);
+  }
+  field.addEventListener("input", () => {
+    try {
+      localStorage.setItem(key, field.value);
+      storageNote.hidden = true;
+    } catch (error) {
+      showStorageError(error);
+    }
+  });
+});
+</script>
+<script>
+(function(){var t=localStorage.getItem('gallery-theme');if(!t||t==='gallery')return;var c={dark:{'--ivory':'#1A1A20','--slate':'#E8E6E1','--clay':'#FF7A5C','--oat':'#3A3A42','--olive':'#7ABF6E','--rust':'#E87A4A','--sky':'#6BA3D6','--plum':'#C07AB8','--white':'#1A1A20','--gray-100':'#222228','--gray-200':'#2A2A30','--gray-300':'#3A3A42','--gray-500':'#8A8880','--gray-700':'#B0AEA6','--surface':'#222228','--surface-0':'#181820','--surface-1':'#1A1A20','--surface-2':'#222228','--surface-hover':'#2A2A32','--border':'#2E2E36','--border-subtle':'#262630','--border-focus':'#4A4A56'},terminal:{'--ivory':'#0A0E0A','--slate':'#33FF66','--clay':'#FF9933','--oat':'#1A331A','--olive':'#33FF66','--rust':'#FF6633','--sky':'#33CCFF','--plum':'#CC66FF','--white':'#111611','--gray-100':'#142814','--gray-200':'#1A331A','--gray-300':'#225522','--gray-500':'#1A9940','--gray-700':'#22CC55','--surface':'#0D140D','--surface-0':'#080C08','--surface-1':'#111611','--surface-2':'#0D140D','--surface-hover':'#152015','--border':'#1A331A','--border-subtle':'#142814','--border-focus':'#225522'},zen:{'--ivory':'#FEFEFE','--slate':'#2C2C2C','--clay':'#C88870','--oat':'#E8E8E0','--olive':'#8CB880','--rust':'#B89080','--sky':'#8898B0','--plum':'#A088A0','--white':'#FFFFFF','--gray-100':'#F6F6F6','--gray-200':'#EEEEEE','--gray-300':'#DDDDDD','--gray-500':'#8C8C8C','--gray-700':'#5C5C5C','--surface':'#F6F6F6','--surface-0':'#FEFEFE','--surface-1':'#FFFFFF','--surface-2':'#F6F6F6','--surface-hover':'#F0F0F0','--border':'#E0E0E0','--border-subtle':'#EBEBEB','--border-focus':'#CCCCCC'}};var s=document.documentElement.style;var m=c[t]||{};Object.keys(m).forEach(function(k){s.setProperty(k,m[k])});})();
+</script>
+</body>
+</html>
